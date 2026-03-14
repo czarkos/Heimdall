@@ -19,6 +19,9 @@ ALGO_WHITELIST = {
     "linnos",
     "linnos_hedging",
     "dt",
+    "fixed_lat_dt",
+    "padded_lat_dt",
+    "hierarchy",
     "surrogate_dt",
 }
 
@@ -152,6 +155,12 @@ def main() -> None:
         # Helpful visibility for missing DT-family results.
         if "dt" not in algo_names:
             print("    [WARN] dt directory missing in {}".format(trace_dir))
+        if "fixed_lat_dt" not in algo_names:
+            print("    [WARN] fixed_lat_dt directory missing in {}".format(trace_dir))
+        if "padded_lat_dt" not in algo_names:
+            print("    [WARN] padded_lat_dt directory missing in {}".format(trace_dir))
+        if "hierarchy" not in algo_names:
+            print("    [WARN] hierarchy directory missing in {}".format(trace_dir))
         if "surrogate_dt" not in algo_names:
             print("    [WARN] surrogate_dt directory missing in {}".format(trace_dir))
 
