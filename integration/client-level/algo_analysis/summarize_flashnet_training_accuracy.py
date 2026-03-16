@@ -10,6 +10,9 @@ from typing import Dict, List, Optional, Tuple
 ACCURACY_LINE_RE = re.compile(
     r"accuracy:\s*([0-9]*\.?[0-9]+)[^\n\r]*val_accuracy:\s*([0-9]*\.?[0-9]+)"
 )
+TOTAL_PARAMS_RE = re.compile(r"Total params:\s*([0-9,]+)")
+TRAINABLE_PARAMS_RE = re.compile(r"Trainable params:\s*([0-9,]+)")
+NON_TRAINABLE_PARAMS_RE = re.compile(r"Non-trainable params:\s*([0-9,]+)")
 
 
 def parse_args() -> argparse.Namespace:
@@ -50,6 +53,14 @@ def infer_mldrive_id(log_path: Path) -> str:
     return m.group(1) if m else ""
 
 
+def infer_eval_stats_path(log_path: Path) -> Path:
+    # training_results/mldrive0results.txt -> training_results/mldrive0/nnK/eval.stats
+    mldrive_id = infer_mldrive_id(log_path)
+    if not mldrive_id:
+        return log_path.parent / "eval.stats"
+    return log_path.parent / mldrive_id / "nnK" / "eval.stats"
+
+
 def parse_accuracy_from_log(log_path: Path) -> Optional[Tuple[float, float, int]]:
     try:
         text = log_path.read_text(errors="ignore")
@@ -64,6 +75,29 @@ def parse_accuracy_from_log(log_path: Path) -> Optional[Tuple[float, float, int]
 
     train_acc_str, val_acc_str = matches[-1]
     return float(train_acc_str), float(val_acc_str), len(matches)
+
+
+def parse_param_counts(eval_stats_path: Path) -> Tuple[Optional[int], Optional[int], Optional[int]]:
+    try:
+        text = eval_stats_path.read_text(errors="ignore")
+    except Exception:
+        return None, None, None
+
+    total = None
+    trainable = None
+    non_trainable = None
+
+    m = TOTAL_PARAMS_RE.search(text)
+    if m:
+        total = int(m.group(1).replace(",", ""))
+    m = TRAINABLE_PARAMS_RE.search(text)
+    if m:
+        trainable = int(m.group(1).replace(",", ""))
+    m = NON_TRAINABLE_PARAMS_RE.search(text)
+    if m:
+        non_trainable = int(m.group(1).replace(",", ""))
+
+    return total, trainable, non_trainable
 
 
 def aggregate(values: List[float]) -> Dict[str, float]:
@@ -90,10 +124,18 @@ def main() -> None:
     rows: List[Dict[str, object]] = []
     train_vals: List[float] = []
     val_vals: List[float] = []
+    total_params_vals: List[float] = []
+    trainable_params_vals: List[float] = []
+    non_trainable_params_vals: List[float] = []
     parsed_count = 0
     skipped_count = 0
 
     for log_path in log_files:
+        eval_stats_path = infer_eval_stats_path(log_path)
+        total_params, trainable_params, non_trainable_params = parse_param_counts(
+            eval_stats_path
+        )
+
         parsed = parse_accuracy_from_log(log_path)
         if parsed is None:
             skipped_count += 1
@@ -107,6 +149,10 @@ def main() -> None:
                     "final_train_accuracy": "",
                     "final_val_accuracy": "",
                     "train_minus_val": "",
+                    "total_params": total_params if total_params is not None else "",
+                    "trainable_params": trainable_params if trainable_params is not None else "",
+                    "non_trainable_params": non_trainable_params if non_trainable_params is not None else "",
+                    "eval_stats_path": str(eval_stats_path),
                     "status": "parse_failed",
                 }
             )
@@ -116,6 +162,12 @@ def main() -> None:
         parsed_count += 1
         train_vals.append(train_acc)
         val_vals.append(val_acc)
+        if total_params is not None:
+            total_params_vals.append(float(total_params))
+        if trainable_params is not None:
+            trainable_params_vals.append(float(trainable_params))
+        if non_trainable_params is not None:
+            non_trainable_params_vals.append(float(non_trainable_params))
 
         rows.append(
             {
@@ -127,6 +179,10 @@ def main() -> None:
                 "final_train_accuracy": round(train_acc, 6),
                 "final_val_accuracy": round(val_acc, 6),
                 "train_minus_val": round(train_acc - val_acc, 6),
+                "total_params": total_params if total_params is not None else "",
+                "trainable_params": trainable_params if trainable_params is not None else "",
+                "non_trainable_params": non_trainable_params if non_trainable_params is not None else "",
+                "eval_stats_path": str(eval_stats_path),
                 "status": "ok",
             }
         )
@@ -134,6 +190,9 @@ def main() -> None:
     train_stats = aggregate(train_vals)
     val_stats = aggregate(val_vals)
     gap_stats = aggregate([t - v for t, v in zip(train_vals, val_vals)])
+    total_params_stats = aggregate(total_params_vals)
+    trainable_params_stats = aggregate(trainable_params_vals)
+    non_trainable_params_stats = aggregate(non_trainable_params_vals)
 
     rows.append(
         {
@@ -145,11 +204,18 @@ def main() -> None:
             "final_train_accuracy": round(train_stats["mean"], 6),
             "final_val_accuracy": round(val_stats["mean"], 6),
             "train_minus_val": round(gap_stats["mean"], 6),
+            "total_params": round(total_params_stats["mean"], 3),
+            "trainable_params": round(trainable_params_stats["mean"], 3),
+            "non_trainable_params": round(non_trainable_params_stats["mean"], 3),
+            "eval_stats_path": "",
             "status": (
                 "parsed={} skipped={} "
                 "train[min,max]=[{:.6f},{:.6f}] "
                 "val[min,max]=[{:.6f},{:.6f}] "
-                "gap[min,max]=[{:.6f},{:.6f}]"
+                "gap[min,max]=[{:.6f},{:.6f}] "
+                "total_params[min,max]=[{:.0f},{:.0f}] "
+                "trainable[min,max]=[{:.0f},{:.0f}] "
+                "non_trainable[min,max]=[{:.0f},{:.0f}]"
             ).format(
                 parsed_count,
                 skipped_count,
@@ -159,6 +225,12 @@ def main() -> None:
                 val_stats["max"],
                 gap_stats["min"],
                 gap_stats["max"],
+                total_params_stats["min"],
+                total_params_stats["max"],
+                trainable_params_stats["min"],
+                trainable_params_stats["max"],
+                non_trainable_params_stats["min"],
+                non_trainable_params_stats["max"],
             ),
         }
     )
@@ -176,6 +248,10 @@ def main() -> None:
                 "final_train_accuracy",
                 "final_val_accuracy",
                 "train_minus_val",
+                "total_params",
+                "trainable_params",
+                "non_trainable_params",
+                "eval_stats_path",
                 "status",
             ],
         )
@@ -192,6 +268,10 @@ def main() -> None:
     print(
         "Val accuracy min/max/mean:   "
         f"{val_stats['min']:.6f}/{val_stats['max']:.6f}/{val_stats['mean']:.6f}"
+    )
+    print(
+        "Total params min/max/mean:   "
+        f"{total_params_stats['min']:.0f}/{total_params_stats['max']:.0f}/{total_params_stats['mean']:.3f}"
     )
     print(f"CSV written to: {out_path.resolve()}")
 
