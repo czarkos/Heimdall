@@ -2,7 +2,7 @@
 
 import argparse
 import os
-from typing import List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -54,7 +54,7 @@ def train_decision_tree(
     max_depth: Optional[int] = None,
     min_samples_split: int = 2,
     min_samples_leaf: int = 1,
-):
+) -> Tuple[DecisionTreeClassifier, List[str], Dict[str, float], str]:
     """
     Train a decision tree directly on the FlashNet training dataset.
 
@@ -121,15 +121,29 @@ def train_decision_tree(
     train_acc = accuracy_score(y_train, y_train_pred)
     test_acc = accuracy_score(y_test, y_test_pred)
 
-    print("=== Decision Tree Surrogate (direct on labels) ===")
-    print(f"Train accuracy: {train_acc:.4f}")
-    print(f"Test  accuracy: {test_acc:.4f}")
-    print("\nClassification report (test set):")
-    print(classification_report(y_test, y_test_pred, digits=4))
-    print("Confusion matrix (test set):")
-    print(confusion_matrix(y_test, y_test_pred))
+    test_report = classification_report(y_test, y_test_pred, digits=4)
+    test_confusion = confusion_matrix(y_test, y_test_pred)
 
-    return clf, feature_names
+    stats_lines = [
+        "=== Decision Tree Surrogate (direct on labels) ===",
+        f"Train accuracy: {train_acc:.4f}",
+        f"Test  accuracy: {test_acc:.4f}",
+        "",
+        "Classification report (test set):",
+        str(test_report),
+        "Confusion matrix (test set):",
+        str(test_confusion),
+    ]
+    stats_text = "\n".join(stats_lines)
+
+    print(stats_text)
+
+    metrics = {
+        "train_accuracy": float(train_acc),
+        "test_accuracy": float(test_acc),
+    }
+
+    return clf, feature_names, metrics, stats_text
 
 
 def export_tree_to_header(
@@ -276,6 +290,12 @@ def main():
         type=int,
         default=1,
     )
+    parser.add_argument(
+        "-stats_output",
+        help="Optional path to persist training stats text output.",
+        type=str,
+        default="",
+    )
 
     args = parser.parse_args()
 
@@ -283,7 +303,7 @@ def main():
     if not os.path.exists(dataset_path):
         raise SystemExit(f"Dataset not found: {dataset_path}")
 
-    clf, feature_names = train_decision_tree(
+    clf, feature_names, metrics, stats_text = train_decision_tree(
         dataset_path,
         max_depth=args.max_depth,
         min_samples_split=args.min_samples_split,
@@ -300,6 +320,18 @@ def main():
 
     print("\n=== Surrogate DT training complete ===")
     print(f"Generated header: {header_path}")
+    if args.stats_output:
+        stats_dir = os.path.dirname(os.path.abspath(args.stats_output))
+        os.makedirs(stats_dir, exist_ok=True)
+        with open(args.stats_output, "w") as f:
+            f.write(stats_text + "\n")
+            f.write("\n")
+            f.write(
+                "metrics_json = "
+                + '{"train_accuracy": %.6f, "test_accuracy": %.6f}\n'
+                % (metrics["train_accuracy"], metrics["test_accuracy"])
+            )
+        print(f"Training stats written: {args.stats_output}")
 
 
 if __name__ == "__main__":

@@ -13,9 +13,6 @@ from sklearn.tree import DecisionTreeClassifier, _tree
 
 
 def prepare_dataset(dataset_path: str) -> Tuple[pd.DataFrame, pd.Series, List[str]]:
-    """
-    Load a FlashNet training dataset and prepare model inputs similarly to nnK.py.
-    """
     dataset = pd.read_csv(dataset_path)
 
     if "latency" in dataset.columns:
@@ -38,16 +35,6 @@ def _load_csv_array(path: str) -> np.ndarray:
 
 
 def get_flashnet_teacher_predictions(dataset_path: str, x_raw: pd.DataFrame) -> np.ndarray:
-    """
-    Reconstruct FlashNet outputs from exported weights written by flashnet/training/nnK.py.
-
-    Expected files next to dataset_path:
-      <dataset>.weight_0.csv  (scaler data_min_)
-      <dataset>.bias_0.csv    (scaler data_range_)
-      <dataset>.weight_1.csv, <dataset>.bias_1.csv
-      <dataset>.weight_2.csv, <dataset>.bias_2.csv
-      <dataset>.weight_3.csv, <dataset>.bias_3.csv
-    """
     p_w0 = dataset_path + ".weight_0.csv"
     p_b0 = dataset_path + ".bias_0.csv"
     p_w1 = dataset_path + ".weight_1.csv"
@@ -64,12 +51,10 @@ def get_flashnet_teacher_predictions(dataset_path: str, x_raw: pd.DataFrame) -> 
             "Missing exported FlashNet weight files:\n  " + "\n  ".join(missing)
         )
 
-    # MinMax scaler stats from nnK.py export
     data_min = _load_csv_array(p_w0).reshape(-1)
     data_range = _load_csv_array(p_b0).reshape(-1)
     safe_range = np.where(np.abs(data_range) < 1e-12, 1.0, data_range)
 
-    # DNN weights (Dense: 12->128->16->1)
     w1 = np.atleast_2d(_load_csv_array(p_w1))
     b1 = _load_csv_array(p_b1).reshape(-1)
     w2 = np.atleast_2d(_load_csv_array(p_w2))
@@ -77,7 +62,6 @@ def get_flashnet_teacher_predictions(dataset_path: str, x_raw: pd.DataFrame) -> 
     w3 = np.atleast_2d(_load_csv_array(p_w3))
     b3 = _load_csv_array(p_b3).reshape(-1)
 
-    # Normalize last layer shape to (hidden, 1)
     if w3.shape[1] != 1:
         if w3.shape[0] == 1:
             w3 = w3.T
@@ -87,19 +71,16 @@ def get_flashnet_teacher_predictions(dataset_path: str, x_raw: pd.DataFrame) -> 
     x = x_raw.to_numpy(dtype=float)
     x_norm = (x - data_min) / safe_range
 
-    # FlashNet forward pass
     z1 = np.maximum(0.0, x_norm @ w1 + b1)
     z2 = np.maximum(0.0, z1 @ w2 + b2)
     logits = z2 @ w3 + b3
-
-    # sigmoid(logit) > 0.5  <=> logit > 0
     return (logits.reshape(-1) >= 0.0).astype(int)
 
 
 def train_surrogate_tree(
     dataset_path: str,
     target: str = "flashnet",
-    max_depth: Optional[int] = None,
+    max_depth: Optional[int] = 15,
     min_samples_split: int = 2,
     min_samples_leaf: int = 1,
 ) -> Tuple[DecisionTreeClassifier, List[str], Dict[str, float], str]:
@@ -141,13 +122,14 @@ def train_surrogate_tree(
         teacher_test_acc_gt = accuracy_score(y_test_gt, y_test_target)
         dt_train_acc_gt = accuracy_score(y_train_gt, y_train_pred)
         dt_test_acc_gt = accuracy_score(y_test_gt, y_test_pred)
-
         fidelity_report = classification_report(y_test_target, y_test_pred, digits=4)
         fidelity_confusion = confusion_matrix(y_test_target, y_test_pred)
+
         stats_lines = [
-            "=== Decision Tree Surrogate (mimic FlashNet outputs) ===",
+            "=== Small Surrogate DT (mimic FlashNet outputs) ===",
             "Train fidelity (DT vs FlashNet): {:.4f}".format(train_fidelity),
             "Test  fidelity (DT vs FlashNet): {:.4f}".format(test_fidelity),
+            "Configured max_depth: {}".format(max_depth),
             "",
             "Accuracy against ground-truth labels (for reference)",
             "FlashNet teacher - Train: {:.4f}, Test: {:.4f}".format(
@@ -165,6 +147,7 @@ def train_surrogate_tree(
         stats_text = "\n".join(stats_lines)
         print(stats_text)
         metrics: Dict[str, float] = {
+            "max_depth": float(max_depth) if max_depth is not None else -1.0,
             "train_fidelity": float(train_fidelity),
             "test_fidelity": float(test_fidelity),
             "teacher_train_acc_gt": float(teacher_train_acc_gt),
@@ -178,9 +161,10 @@ def train_surrogate_tree(
         direct_report = classification_report(y_test_gt, y_test_pred, digits=4)
         direct_confusion = confusion_matrix(y_test_gt, y_test_pred)
         stats_lines = [
-            "=== Decision Tree Surrogate (direct on labels) ===",
+            "=== Small Surrogate DT (direct on labels) ===",
             "Train accuracy: {:.4f}".format(train_acc),
             "Test  accuracy: {:.4f}".format(test_acc),
+            "Configured max_depth: {}".format(max_depth),
             "",
             "Classification report (test set):",
             str(direct_report),
@@ -190,6 +174,7 @@ def train_surrogate_tree(
         stats_text = "\n".join(stats_lines)
         print(stats_text)
         metrics = {
+            "max_depth": float(max_depth) if max_depth is not None else -1.0,
             "train_accuracy": float(train_acc),
             "test_accuracy": float(test_acc),
         }
@@ -227,7 +212,7 @@ def export_tree_to_header(
 
     print("Writing decision tree header to: {}".format(header_path))
     with open(header_path, "w") as f:
-        f.write("\n/* Surrogate decision tree for {} / {} */\n".format(workload, drive))
+        f.write("\n/* Small surrogate decision tree for {} / {} */\n".format(workload, drive))
         from datetime import datetime
 
         f.write("/**\n")
@@ -266,9 +251,9 @@ def export_tree_to_header(
     return header_path
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Train a DT surrogate and export C headers for client-level integration."
+        description="Train a small-depth surrogate DT and export C headers."
     )
     parser.add_argument(
         "-target",
@@ -277,57 +262,27 @@ def main():
         choices=["flashnet", "label"],
         default="flashnet",
     )
-    parser.add_argument(
-        "-dataset",
-        help="Path to FlashNet training dataset CSV (e.g., mldrive0.csv)",
-        type=str,
-        required=True,
-    )
-    parser.add_argument(
-        "-workload",
-        help="Workload name used in header file name (default: Trace)",
-        type=str,
-        default="Trace",
-    )
-    parser.add_argument(
-        "-drive",
-        help="Drive identifier (e.g., dev_0, dev_1). Used in header symbol names.",
-        type=str,
-        required=True,
-    )
-    parser.add_argument(
-        "-output_dir",
-        help="Directory to place generated header (default: ./dt_weights_header)",
-        type=str,
-        default="dt_weights_header",
-    )
+    parser.add_argument("-dataset", type=str, required=True)
+    parser.add_argument("-workload", type=str, default="Trace")
+    parser.add_argument("-drive", type=str, required=True)
+    parser.add_argument("-output_dir", type=str, default="surrogate_headers")
     parser.add_argument(
         "-max_depth",
-        help="Maximum depth of the decision tree (default: None for unbounded)",
         type=int,
-        default=None,
+        default=15,
+        help="Maximum depth of the decision tree (default: 15).",
     )
-    parser.add_argument(
-        "-min_samples_split",
-        help="Minimum number of samples required to split an internal node (default: 2)",
-        type=int,
-        default=2,
-    )
-    parser.add_argument(
-        "-min_samples_leaf",
-        help="Minimum number of samples required to be at a leaf node (default: 1)",
-        type=int,
-        default=1,
-    )
+    parser.add_argument("-min_samples_split", type=int, default=2)
+    parser.add_argument("-min_samples_leaf", type=int, default=1)
     parser.add_argument(
         "-metrics_output",
-        help="Optional path to write training/fidelity metrics as JSON.",
+        help="Optional path to write metrics as JSON.",
         type=str,
         default="",
     )
     parser.add_argument(
         "-stats_output",
-        help="Optional path to write a human-readable training stats file.",
+        help="Optional path to write human-readable training stats.",
         type=str,
         default="",
     )
@@ -352,15 +307,18 @@ def main():
         output_dir=args.output_dir,
     )
 
-    print("\n=== Surrogate DT training complete ===")
+    print("\n=== Small surrogate DT training complete ===")
     print("Target mode: {}".format(args.target))
+    print("Configured max_depth: {}".format(args.max_depth))
     print("Generated header: {}".format(header_path))
+
     if args.metrics_output:
         metrics_dir = os.path.dirname(os.path.abspath(args.metrics_output))
         os.makedirs(metrics_dir, exist_ok=True)
         with open(args.metrics_output, "w") as f:
             json.dump(metrics, f, indent=2, sort_keys=True)
         print("Metrics JSON: {}".format(args.metrics_output))
+
     if args.stats_output:
         stats_dir = os.path.dirname(os.path.abspath(args.stats_output))
         os.makedirs(stats_dir, exist_ok=True)
@@ -371,4 +329,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

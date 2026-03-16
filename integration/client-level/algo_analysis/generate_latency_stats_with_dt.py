@@ -23,6 +23,10 @@ ALGO_WHITELIST = {
     "padded_lat_dt",
     "hierarchy",
     "surrogate_dt",
+    "small_surrogate_dt",
+    "small_hierarchy_p95",
+    "small_hierarchy_p98",
+    "small_surrogate_dt_depth5",
 }
 
 

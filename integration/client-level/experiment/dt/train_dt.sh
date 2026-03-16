@@ -65,6 +65,9 @@ for TRACE_DIR in "$@"; do
     fi
 
     OUT_DIR="${TRAINING_RESULTS_DIR}/dt_weights_header"
+    STATS_PATH0="${TRAINING_RESULTS_DIR}/dt_dev_0_training.stats"
+    STATS_PATH1="${TRAINING_RESULTS_DIR}/dt_dev_1_training.stats"
+    COMBINED_STATS_PATH="${TRAINING_RESULTS_DIR}/dt_training.stats"
     mkdir -p "${OUT_DIR}"
     case "${OUT_DIR}" in
         *"/flashnet/"*)
@@ -79,7 +82,8 @@ for TRACE_DIR in "$@"; do
         -dataset "${DATASET0}" \
         -workload Trace \
         -drive dev_0 \
-        -output_dir "${OUT_DIR}"
+        -output_dir "${OUT_DIR}" \
+        -stats_output "${STATS_PATH0}"
 
     echo
     echo "  -> Training DT for dev_1"
@@ -87,11 +91,30 @@ for TRACE_DIR in "$@"; do
         -dataset "${DATASET1}" \
         -workload Trace \
         -drive dev_1 \
-        -output_dir "${OUT_DIR}"
+        -output_dir "${OUT_DIR}" \
+        -stats_output "${STATS_PATH1}"
+
+    {
+        echo "========== Standard DT Training Stats =========="
+        echo "trace_dir = ${TRACE_DIR}"
+        echo "device_pair = ${DEV0}...${DEV1}"
+        echo "generated_on = $(date '+%Y-%m-%d %H:%M:%S')"
+        echo ""
+        echo "[dev_0]"
+        cat "${STATS_PATH0}"
+        echo ""
+        echo "[dev_1]"
+        cat "${STATS_PATH1}"
+        echo "================================================"
+    } > "${COMBINED_STATS_PATH}"
 
     echo
     echo "  DT headers generated under:"
     echo "    ${OUT_DIR}"
     echo "    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)"
+    echo "  DT training stats:"
+    echo "    ${STATS_PATH0}"
+    echo "    ${STATS_PATH1}"
+    echo "    ${COMBINED_STATS_PATH}"
 done
 

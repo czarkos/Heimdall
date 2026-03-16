@@ -3,18 +3,14 @@
 set -euo pipefail
 
 # Usage:
-#   ./train_surrogate_dt_fidelity.sh dev0 dev1 dir1 [dir2 dir3 ...]
+#   ./train_small_surrogate_dt.sh dev0 dev1 dir1 [dir2 dir3 ...]
 #
-# For each dirX, expects FlashNet training outputs:
-#   dirX/<dev0>...<dev1>/flashnet/training_results/mldrive0.csv
-#   dirX/<dev0>...<dev1>/flashnet/training_results/mldrive1.csv
-# plus CSV weight exports next to each dataset:
-#   mldrive*.csv.weight_{0,1,2,3}.csv and mldrive*.csv.bias_{0,1,2,3}.csv
-#
-# Output headers:
-#   dirX/<dev0>...<dev1>/surrogate_dt/training_results/surrogate_headers/
-#     w_Trace_dev_0_dt.h
-#     w_Trace_dev_1_dt.h
+# Output (separate from surrogate_dt):
+#   dirX/<dev0>...<dev1>/small_surrogate_dt/training_results/
+#     - surrogate_headers/w_Trace_dev_{0,1}_dt.h
+#     - small_surrogate_dev_{0,1}_metrics.json
+#     - small_surrogate_dev_{0,1}_training.stats
+#     - small_surrogate_training.stats
 
 if [ $# -lt 3 ]; then
     echo "Usage: $0 device0 device1 dir_to_replayed_traces [more_dirs...]"
@@ -29,18 +25,29 @@ shift 2
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${SCRIPT_DIR}"
 
+MAX_DEPTH="${SMALL_SURROGATE_MAX_DEPTH:-15}"
+ALGO_NAME="${SMALL_SURROGATE_ALGO_NAME:-small_surrogate_dt}"
+
 for TRACE_DIR in "$@"; do
-    TRAINING_RESULTS_DIR="${TRACE_DIR}/${DEV0}...${DEV1}/flashnet/training_results"
-    DATASET0="${TRAINING_RESULTS_DIR}/mldrive0.csv"
-    DATASET1="${TRAINING_RESULTS_DIR}/mldrive1.csv"
+    FLASHNET_RESULTS_DIR="${TRACE_DIR}/${DEV0}...${DEV1}/flashnet/training_results"
+    DATASET0="${FLASHNET_RESULTS_DIR}/mldrive0.csv"
+    DATASET1="${FLASHNET_RESULTS_DIR}/mldrive1.csv"
+
+    TRAINING_ROOT="${TRACE_DIR}/${DEV0}...${DEV1}/${ALGO_NAME}/training_results"
+    OUT_DIR="${TRAINING_ROOT}/surrogate_headers"
+    METRICS0_JSON="${TRAINING_ROOT}/small_surrogate_dev_0_metrics.json"
+    METRICS1_JSON="${TRAINING_ROOT}/small_surrogate_dev_1_metrics.json"
+    STATS0_PATH="${TRAINING_ROOT}/small_surrogate_dev_0_training.stats"
+    STATS1_PATH="${TRAINING_ROOT}/small_surrogate_dev_1_training.stats"
+    COMBINED_STATS_PATH="${TRAINING_ROOT}/small_surrogate_training.stats"
 
     echo
     echo "======================================================="
-    echo "Training fidelity surrogate DT for workload:"
+    echo "Training small surrogate DT for workload:"
     echo "  Trace root dir    => ${TRACE_DIR}"
-    echo "  Training results  => ${TRAINING_RESULTS_DIR}"
-    echo "  Dataset dev_0     => ${DATASET0}"
-    echo "  Dataset dev_1     => ${DATASET1}"
+    echo "  FlashNet data dir => ${FLASHNET_RESULTS_DIR}"
+    echo "  Output dir        => ${TRAINING_ROOT}"
+    echo "  max_depth         => ${MAX_DEPTH}"
     echo "======================================================="
 
     if [ ! -f "${DATASET0}" ]; then
@@ -52,45 +59,39 @@ for TRACE_DIR in "$@"; do
         continue
     fi
 
-    TRAINING_ROOT="${TRACE_DIR}/${DEV0}...${DEV1}/surrogate_dt/training_results"
-    OUT_DIR="${TRAINING_ROOT}/surrogate_headers"
-    METRICS0_JSON="${TRAINING_ROOT}/surrogate_dev_0_metrics.json"
-    METRICS1_JSON="${TRAINING_ROOT}/surrogate_dev_1_metrics.json"
-    STATS0_PATH="${TRAINING_ROOT}/surrogate_dev_0_training.stats"
-    STATS1_PATH="${TRAINING_ROOT}/surrogate_dev_1_training.stats"
-    COMBINED_STATS_PATH="${TRAINING_ROOT}/surrogate_training.stats"
     mkdir -p "${OUT_DIR}"
 
     echo
-    echo "  -> Training fidelity surrogate for dev_0"
-    python3 "${SCRIPT_DIR}/train_surrogate_dt_fidelity.py" \
+    echo "  -> Training small surrogate for dev_0"
+    python3 "${SCRIPT_DIR}/train_small_surrogate_dt_fidelity.py" \
         -target flashnet \
         -dataset "${DATASET0}" \
         -workload Trace \
         -drive dev_0 \
         -output_dir "${OUT_DIR}" \
+        -max_depth "${MAX_DEPTH}" \
         -metrics_output "${METRICS0_JSON}" \
         -stats_output "${STATS0_PATH}"
 
     echo
-    echo "  -> Training fidelity surrogate for dev_1"
-    python3 "${SCRIPT_DIR}/train_surrogate_dt_fidelity.py" \
+    echo "  -> Training small surrogate for dev_1"
+    python3 "${SCRIPT_DIR}/train_small_surrogate_dt_fidelity.py" \
         -target flashnet \
         -dataset "${DATASET1}" \
         -workload Trace \
         -drive dev_1 \
         -output_dir "${OUT_DIR}" \
+        -max_depth "${MAX_DEPTH}" \
         -metrics_output "${METRICS1_JSON}" \
         -stats_output "${STATS1_PATH}"
 
-    python3 - "${METRICS0_JSON}" "${METRICS1_JSON}" "${COMBINED_STATS_PATH}" "${TRACE_DIR}" <<'PY'
+    python3 - "${METRICS0_JSON}" "${METRICS1_JSON}" "${COMBINED_STATS_PATH}" "${TRACE_DIR}" "${MAX_DEPTH}" <<'PY'
 import json
 import os
 import sys
 from datetime import datetime
 
-metrics0_path, metrics1_path, out_path, trace_dir = sys.argv[1:]
-
+metrics0_path, metrics1_path, out_path, trace_dir, max_depth = sys.argv[1:]
 with open(metrics0_path, "r") as f:
     m0 = json.load(f)
 with open(metrics1_path, "r") as f:
@@ -100,44 +101,43 @@ def getv(d, key):
     return d.get(key, float("nan"))
 
 lines = [
-    "========== Surrogate DT Training Stats ==========",
+    "========== Small Surrogate DT Training Stats ==========",
     f"generated_on = {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
     f"trace_dir = {trace_dir}",
+    f"configured_max_depth = {max_depth}",
     "",
     "[dev_0]",
     f"train_fidelity = {getv(m0, 'train_fidelity'):.6f}",
     f"test_fidelity = {getv(m0, 'test_fidelity'):.6f}",
     f"teacher_train_acc_gt = {getv(m0, 'teacher_train_acc_gt'):.6f}",
     f"teacher_test_acc_gt = {getv(m0, 'teacher_test_acc_gt'):.6f}",
-    f"surrogate_train_acc_gt = {getv(m0, 'dt_train_acc_gt'):.6f}",
-    f"surrogate_test_acc_gt = {getv(m0, 'dt_test_acc_gt'):.6f}",
+    f"small_surrogate_train_acc_gt = {getv(m0, 'dt_train_acc_gt'):.6f}",
+    f"small_surrogate_test_acc_gt = {getv(m0, 'dt_test_acc_gt'):.6f}",
     "",
     "[dev_1]",
     f"train_fidelity = {getv(m1, 'train_fidelity'):.6f}",
     f"test_fidelity = {getv(m1, 'test_fidelity'):.6f}",
     f"teacher_train_acc_gt = {getv(m1, 'teacher_train_acc_gt'):.6f}",
     f"teacher_test_acc_gt = {getv(m1, 'teacher_test_acc_gt'):.6f}",
-    f"surrogate_train_acc_gt = {getv(m1, 'dt_train_acc_gt'):.6f}",
-    f"surrogate_test_acc_gt = {getv(m1, 'dt_test_acc_gt'):.6f}",
-    "=================================================",
+    f"small_surrogate_train_acc_gt = {getv(m1, 'dt_train_acc_gt'):.6f}",
+    f"small_surrogate_test_acc_gt = {getv(m1, 'dt_test_acc_gt'):.6f}",
+    "=======================================================",
 ]
 
 os.makedirs(os.path.dirname(out_path), exist_ok=True)
 with open(out_path, "w") as f:
     f.write("\n".join(lines) + "\n")
-print(f"  surrogate training stats written to: {out_path}")
+print(f"  small surrogate training stats written to: {out_path}")
 PY
 
-    echo
-    echo "  Fidelity surrogate headers generated under:"
+    echo "  Small surrogate headers:"
     echo "    ${OUT_DIR}"
     echo "    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)"
-    echo "  Surrogate metrics:"
+    echo "  Small surrogate metrics:"
     echo "    ${METRICS0_JSON}"
     echo "    ${METRICS1_JSON}"
-    echo "  Surrogate training stats:"
+    echo "  Small surrogate training stats:"
     echo "    ${STATS0_PATH}"
     echo "    ${STATS1_PATH}"
     echo "    ${COMBINED_STATS_PATH}"
 done
-
