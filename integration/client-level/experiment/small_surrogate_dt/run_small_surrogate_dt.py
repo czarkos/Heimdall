@@ -14,9 +14,12 @@ import pandas as pd
 DEFAULT_ALGORITHM = "small_surrogate_dt"
 
 
-def get_output_dir(trace_dir: str, devices: List[str], algo_name: str) -> str:
+def get_output_dir(trace_dir: str, devices: List[str], algo_name: str, run_idx: int = -1) -> str:
     dev_names = [os.path.basename(d) for d in devices]
-    return os.path.join(str(trace_dir), "...".join(dev_names), algo_name)
+    base = os.path.join(str(trace_dir), "...".join(dev_names), algo_name)
+    if run_idx >= 0:
+        return os.path.join(base, f"run_{run_idx}")
+    return base
 
 
 def run_command(command: str) -> None:
@@ -37,8 +40,8 @@ def get_duration_from_trace(trace_path: str) -> str:
     raise RuntimeError(f"Duration line not found in {trace_path}")
 
 
-def start_processing(trace_dir: str, args, specific_workplace: str) -> None:
-    output_dir = get_output_dir(trace_dir, args.devices, args.algo_name)
+def start_processing(trace_dir: str, args, specific_workplace: str, run_idx: int = -1) -> None:
+    output_dir = get_output_dir(trace_dir, args.devices, args.algo_name, run_idx=run_idx)
     devices_list_str = "-".join(args.devices)
 
     commands = []
@@ -150,6 +153,12 @@ if __name__ == "__main__":
         default=DEFAULT_ALGORITHM,
         help="Output subdirectory name under <trace>/<dev0...dev1>/.",
     )
+    parser.add_argument(
+        "-num_runs",
+        type=int,
+        default=1,
+        help="Number of replay repetitions per trace for statistical robustness.",
+    )
     args = parser.parse_args()
 
     if (not args.devices) or (not (args.trace_dir or args.trace_dirs)):
@@ -221,50 +230,62 @@ if __name__ == "__main__":
             if weight_modified_time < stat_modified_time:
                 continue
 
-        specific_workplace = os.path.join(
-            experiment_root,
-            "tmp_running",
-            "{}_{}...{}".format(
-                args.algo_name, args.devices[0].split("/")[2], args.devices[1].split("/")[2]
-            ),
-        )
-        if os.path.exists(specific_workplace):
-            if not delete_dir(specific_workplace):
+        use_run_dirs = args.num_runs > 1
+        for run_i in range(args.num_runs):
+            effective_run_idx = run_i if use_run_dirs else -1
+            run_output_dir = get_output_dir(trace_dir, args.devices, args.algo_name, run_idx=effective_run_idx)
+            run_stat_path = os.path.join(run_output_dir, "trace_1.trace.stats")
+            if args.resume and os.path.isfile(run_stat_path):
+                print(f"     Run {run_i}: already replayed, skipping")
+                continue
+
+            if use_run_dirs:
+                print(f"     Run {run_i}/{args.num_runs}")
+
+            specific_workplace = os.path.join(
+                experiment_root,
+                "tmp_running",
+                "{}_{}...{}".format(
+                    args.algo_name, args.devices[0].split("/")[2], args.devices[1].split("/")[2]
+                ),
+            )
+            if os.path.exists(specific_workplace):
+                if not delete_dir(specific_workplace):
+                    raise SystemExit(1)
+
+            try:
+                shutil.copytree(replay_source_dir, specific_workplace)
+            except Exception as e:
+                print(f"Failed to copy replay source: {e}")
                 raise SystemExit(1)
 
-        try:
-            shutil.copytree(replay_source_dir, specific_workplace)
-        except Exception as e:
-            print(f"Failed to copy replay source: {e}")
-            raise SystemExit(1)
+            if not copy_small_surrogate_weights(
+                trace_dir, args.devices, specific_workplace, args.algo_name
+            ):
+                raise SystemExit(1)
 
-        if not copy_small_surrogate_weights(
-            trace_dir, args.devices, specific_workplace, args.algo_name
-        ):
-            raise SystemExit(1)
-
-        original_directory = os.getcwd()
-        try:
-            os.chdir(specific_workplace)
-            compile_cmd = [
-                "gcc",
-                "dt_algo.c",
-                "io_replayer.c",
-                "-o",
-                "io_replayer_dt",
-                "-lpthread",
-            ]
+            original_directory = os.getcwd()
             try:
-                subprocess.run(compile_cmd, check=True)
-            except subprocess.CalledProcessError:
-                for file in Path("/tmp").glob("*.o"):
-                    file.unlink()
-                subprocess.run(compile_cmd, check=True)
-        finally:
-            os.chdir(original_directory)
+                os.chdir(specific_workplace)
+                compile_cmd = [
+                    "gcc",
+                    "dt_algo.c",
+                    "io_replayer.c",
+                    "-o",
+                    "io_replayer_dt",
+                    "-lpthread",
+                ]
+                try:
+                    subprocess.run(compile_cmd, check=True)
+                except subprocess.CalledProcessError:
+                    for file in Path("/tmp").glob("*.o"):
+                        file.unlink()
+                    subprocess.run(compile_cmd, check=True)
+            finally:
+                os.chdir(original_directory)
 
-        subprocess.run("stty sane", shell=True, check=True)
-        start_processing(trace_dir, args, specific_workplace)
+            subprocess.run("stty sane", shell=True, check=True)
+            start_processing(trace_dir, args, specific_workplace, run_idx=effective_run_idx)
 
-        if not delete_dir(specific_workplace):
-            raise SystemExit(1)
+            if not delete_dir(specific_workplace):
+                raise SystemExit(1)

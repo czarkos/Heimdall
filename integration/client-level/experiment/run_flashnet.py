@@ -34,13 +34,15 @@ def write_stats(statistics, output_file):
             text_file.write(str(line) + "\n")
     print("===== output file : " + output_file)
 
-def get_output_dir(trace_dir, devices):
+def get_output_dir(trace_dir, devices, run_idx=-1):
     dev_names = []
     # get device name
     for dev_path in devices:
         dev_name = os.path.basename(dev_path)
         dev_names.append(dev_name)
     output_dir = os.path.join(str(trace_dir), "...".join(dev_names), ALGORITHM)
+    if run_idx >= 0:
+        output_dir = os.path.join(output_dir, f"run_{run_idx}")
     return output_dir
 
 def read_raw_file(input_file):
@@ -71,15 +73,9 @@ def get_duration_from_trace(trace_path):
                     duration = re.findall("-?\d+", value_raw)[0]
                 return duration
 
-def start_processing(trace_dir, args, specific_workplace):
+def start_processing(trace_dir, args, specific_workplace, run_idx=-1):
     print("Processing " + str(trace_dir))
-    dev_names = []
-    # get device name
-    for dev_path in args.devices:
-        dev_name = os.path.basename(dev_path)
-        dev_names.append(dev_name)
-
-    output_dir = os.path.join(str(trace_dir), "...".join(dev_names), ALGORITHM)
+    output_dir = get_output_dir(trace_dir, args.devices, run_idx=run_idx)
     # print(output_dir)
 
     # Prepare the commands to run in parallel
@@ -259,6 +255,7 @@ if __name__ == '__main__':
     parser.add_argument("-only_replaying", help="Only do replaying, assuming that it's already replayed", action='store_true', default=False)
     parser.add_argument("-if_model_updated", help="Will check if the model weights is newer than the replayed traces", action='store_true', default=False)
     parser.add_argument("-reverse", help="Will start from the last combination", action='store_true')
+    parser.add_argument("-num_runs", help="Number of replay repetitions per trace", type=int, default=1)
     
     args = parser.parse_args()
     if (not args.devices) or (not (args.trace_dir or args.trace_dirs)):
@@ -332,30 +329,38 @@ if __name__ == '__main__':
                 print("     The model is OLDER than the replayed traces, skipping\n\n")
                 continue
 
-        # [NEW WORKPLACE] To avoid conflict make, we copy the source code to a tmp file, specified with current devices name
-        specific_workplace = "./tmp_running/{}_{}...{}".format(ALGORITHM, args.devices[0].split("/")[2], args.devices[1].split("/")[2])
-        if os.path.exists(specific_workplace):
+        use_run_dirs = args.num_runs > 1
+        for run_i in range(args.num_runs):
+            effective_run_idx = run_i if use_run_dirs else -1
+            run_output_dir = get_output_dir(trace_dir, args.devices, run_idx=effective_run_idx)
+            run_stat_path = os.path.join(run_output_dir, "trace_1.trace.stats")
+            if args.resume and os.path.isfile(run_stat_path):
+                print(f"     Run {run_i}: already replayed, skipping")
+                continue
+
+            if use_run_dirs:
+                print(f"     Run {run_i}/{args.num_runs}")
+
+            specific_workplace = "./tmp_running/{}_{}...{}".format(ALGORITHM, args.devices[0].split("/")[2], args.devices[1].split("/")[2])
+            if os.path.exists(specific_workplace):
+                if delete_dir(specific_workplace) == False:
+                    print("Workplace delete error: {}".format(specific_workplace))
+                    exit(-1)
+            print("The specific workplace is {}".format(specific_workplace))
+            try:
+                subprocess.run(["cp", "-r", "./{}".format(ALGORITHM), specific_workplace], check=True)
+            except:
+                print("cp workplace wrong!")
+                exit(-1)
+
+            make_result = make_flashnet(trace_dir, args.devices, specific_workplace)
+            if make_result == False:
+                print("\n[Make ERROR: Weights is not complete. Please (re)train the model on this trace], dir: {}".format(trace_dir))
+                exit(-1)
+
+            subprocess.run("stty sane", shell=True, check=True)
+            start_processing(trace_dir, args, specific_workplace, run_idx=effective_run_idx)
+
             if delete_dir(specific_workplace) == False:
                 print("Workplace delete error: {}".format(specific_workplace))
                 exit(-1)
-        print("The specific workplace is {}".format(specific_workplace))
-        try:
-            subprocess.run(["cp", "-r", "./{}".format(ALGORITHM), specific_workplace], check=True)
-        except:
-            print("cp workplace wrong!")
-            exit(-1)
-
-        # 2. make flashnet
-        make_result = make_flashnet(trace_dir, args.devices, specific_workplace)
-        if make_result == False:   # fail to make
-            print("\n[Make ERROR: Weights is not complete. Please (re)train the model on this trace], dir: {}".format(trace_dir))
-            exit(-1)
-
-        # 3. replaying traces with help of flashnet
-        subprocess.run("stty sane", shell=True, check=True)
-        start_processing(trace_dir, args, specific_workplace)
-
-        # 4. Delete the tmp workplace after replaying
-        if delete_dir(specific_workplace) == False:
-            print("Workplace delete error: {}".format(specific_workplace))
-            exit(-1)
