@@ -14,19 +14,20 @@ import pandas as pd
 ALGO_WHITELIST = {
     "baseline",
     "flashnet",
-    "random",
-    "hedging",
-    "linnos",
-    "linnos_hedging",
-    "dt",
-    "fixed_lat_dt",
-    "padded_lat_dt",
-    "hierarchy",
-    "surrogate_dt",
-    "small_surrogate_dt",
+    #"random",
+    #"hedging",
+    #"linnos",
+    #"linnos_hedging",
+    #"dt",
+    #"fixed_lat_dt",
+    #"padded_lat_dt",
+    #"hierarchy",
+    #"surrogate_dt",
+    #"small_surrogate_dt",
     "small_hierarchy_p95",
-    "small_hierarchy_p98",
+    #"small_hierarchy_p98",
     "small_surrogate_dt_depth5",
+    "padded_small_surrogate_dt",
 }
 
 
@@ -74,15 +75,15 @@ def read_replayed_file(input_file: str) -> pd.DataFrame:
     return df
 
 
-def get_per_trace_latency(algo_dir: str) -> List[float]:
+def get_per_trace_latency(data_dir: str) -> List[float]:
     read_latencies = []
     traces_in_dir = [
         trace
-        for trace in os.listdir(algo_dir)
-        if os.path.isfile(os.path.join(algo_dir, trace)) and str(trace).endswith(".trace")
+        for trace in os.listdir(data_dir)
+        if os.path.isfile(os.path.join(data_dir, trace)) and str(trace).endswith(".trace")
     ]
     for trace_name in traces_in_dir:
-        input_path = os.path.join(algo_dir, trace_name)
+        input_path = os.path.join(data_dir, trace_name)
         df = read_replayed_file(input_path)
         df = df[df["io_type"] == 1]  # read IOs only
         read_latencies += list(df["latency"])
@@ -95,7 +96,18 @@ def get_percentiles(latencies: List[float], n: int = 10000) -> np.ndarray:
     return np.percentile(latencies, percentiles)
 
 
-def start_process_per_algo(algo_dir: str) -> None:
+def detect_run_dirs(algo_dir: str) -> List[str]:
+    """Return sorted list of run_* subdirectories, or empty list for legacy layout."""
+    run_dirs = sorted([
+        os.path.join(algo_dir, d)
+        for d in os.listdir(algo_dir)
+        if d.startswith("run_") and os.path.isdir(os.path.join(algo_dir, d))
+    ])
+    return run_dirs
+
+
+def start_process_per_algo_single(algo_dir: str) -> None:
+    """Original single-run stats generation (backward compatible)."""
     latency_stats = []
     read_latencies = get_per_trace_latency(algo_dir)
 
@@ -115,11 +127,67 @@ def start_process_per_algo(algo_dir: str) -> None:
                 "p{} = {} us".format(round(((idx + 1) / divisor), 2), lat)
             )
     except Exception:
-        # Keep behavior similar to original script: best-effort stats generation.
         pass
 
     output_path = os.path.join(algo_dir, "latency_characteristic.stats")
     write_stats(output_path, "\n".join(latency_stats))
+
+
+def start_process_per_algo_multi(algo_dir: str, run_dirs: List[str]) -> None:
+    """Multi-run aggregated stats: mean and CI for each percentile across runs."""
+    n_percentiles = 10000
+    per_run_percentiles = []
+    per_run_avg = []
+    per_run_count = []
+
+    for run_dir in run_dirs:
+        latencies = get_per_trace_latency(run_dir)
+        if len(latencies) == 0:
+            continue
+        per_run_avg.append(np.mean(latencies))
+        per_run_count.append(len(latencies))
+        per_run_percentiles.append(get_percentiles(latencies, n=n_percentiles))
+
+    if len(per_run_percentiles) == 0:
+        return
+
+    per_run_percentiles_arr = np.array(per_run_percentiles)
+    n_runs = len(per_run_percentiles)
+    mean_percentiles = np.mean(per_run_percentiles_arr, axis=0)
+    std_percentiles = np.std(per_run_percentiles_arr, axis=0, ddof=1) if n_runs > 1 else np.zeros_like(mean_percentiles)
+    ci95_percentiles = 1.96 * std_percentiles / np.sqrt(n_runs) if n_runs > 1 else np.zeros_like(mean_percentiles)
+
+    avg_mean = np.mean(per_run_avg)
+    avg_std = np.std(per_run_avg, ddof=1) if n_runs > 1 else 0.0
+    avg_ci95 = 1.96 * avg_std / np.sqrt(n_runs) if n_runs > 1 else 0.0
+
+    latency_stats = []
+    latency_stats.append("num_runs = {}".format(n_runs))
+    latency_stats.append("count = {} IOs".format(int(np.mean(per_run_count))))
+    latency_stats.append("avg = {} us".format(avg_mean))
+    latency_stats.append("avg_std = {} us".format(avg_std))
+    latency_stats.append("avg_ci95 = {} us".format(avg_ci95))
+    latency_stats.append("std = {} us".format(avg_std))
+    latency_stats.append("median = {} us".format(np.median(mean_percentiles)))
+
+    divisor = n_percentiles / 100
+    for idx in range(n_percentiles):
+        p = round((idx + 1) / divisor, 2)
+        latency_stats.append("p{} = {} us".format(p, mean_percentiles[idx]))
+        latency_stats.append("p{}_std = {} us".format(p, std_percentiles[idx]))
+        latency_stats.append("p{}_ci95 = {} us".format(p, ci95_percentiles[idx]))
+
+    output_path = os.path.join(algo_dir, "latency_characteristic.stats")
+    write_stats(output_path, "\n".join(latency_stats))
+
+
+def start_process_per_algo(algo_dir: str) -> None:
+    run_dirs = detect_run_dirs(algo_dir)
+    if len(run_dirs) > 0:
+        print("      Detected {} runs, aggregating".format(len(run_dirs)))
+        start_process_per_algo_multi(algo_dir, run_dirs)
+    else:
+        start_process_per_algo_single(algo_dir)
 
 
 def main() -> None:
@@ -167,6 +235,8 @@ def main() -> None:
             print("    [WARN] hierarchy directory missing in {}".format(trace_dir))
         if "surrogate_dt" not in algo_names:
             print("    [WARN] surrogate_dt directory missing in {}".format(trace_dir))
+        if "padded_small_surrogate_dt" not in algo_names:
+            print("    [WARN] padded_small_surrogate_dt directory missing in {}".format(trace_dir))
 
         if args.resume and is_all_algo_analyzed(algo_dirs):
             print("    Existing stats are already created, skipping")

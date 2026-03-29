@@ -1,0 +1,8 @@
+trace_pair,inference_count,fallback_count,fallback_rate_pct
+alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme2n1,32305616,5672949,17.5603
+alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme2n1,7129220,1148290,16.1068
+alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme2n1,31171750,2581601,8.2819
+alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme2n1,59434090,8369502,14.082
+alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme2n1,11239800,864879,7.6948
+msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme2n1,4408250,791463,17.9541
+GLOBAL,145688726,19428684,13.3357

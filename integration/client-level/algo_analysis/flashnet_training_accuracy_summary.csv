@@ -1,3 +1,0 @@
-level,algo,file_path,trace_dir,device_pair,drive_id,train_accuracy,test_accuracy,train_fidelity,test_fidelity,teacher_train_acc_gt,teacher_test_acc_gt,surrogate_train_acc_gt,surrogate_test_acc_gt,status
-algo_summary,dt,/mnt/heimdall-exp/Heimdall/integration/client-level/data,,,,0.0,0.0,,,,,,,"parsed=0 failed=0 train[min,max]=[0.000000,0.000000] test[min,max]=[0.000000,0.000000]"
-algo_summary,surrogate_dt,/mnt/heimdall-exp/Heimdall/integration/client-level/data,,,,,,0.0,0.0,,,0.0,0.0,"parsed=0 failed=0 train_fidelity[min,max]=[0.000000,0.000000] test_fidelity[min,max]=[0.000000,0.000000] surrogate_train_gt[min,max]=[0.000000,0.000000] surrogate_test_gt[min,max]=[0.000000,0.000000]"
