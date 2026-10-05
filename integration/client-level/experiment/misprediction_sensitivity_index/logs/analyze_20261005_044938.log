@@ -1,0 +1,58 @@
+[MTI] 48 runs found, 0 cached, 48 to analyze
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. baseline p=nan run 0: n_reads=712922 p95=2717.0us
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. flip p=0.0 run 0: n_reads=712922 p95=936.0us
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. flip p=0.01 run 0: n_reads=712922 p95=987.0us
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. flip p=0.02 run 0: n_reads=712922 p95=904.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 baseline p=nan run 0: n_reads=2357977 p95=2626.0us
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. flip p=0.03 run 0: n_reads=712922 p95=1006.0us
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. flip p=0.04 run 0: n_reads=712922 p95=1058.0us
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. flip p=0.1 run 0: n_reads=712922 p95=1167.0us
+[MTI] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60. flip p=0.05 run 0: n_reads=712922 p95=1062.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re baseline p=nan run 0: n_reads=3117175 p95=1481.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 flip p=0.05 run 0: n_reads=2797250 p95=2161.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 flip p=0.04 run 0: n_reads=2822189 p95=2153.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 flip p=0.1 run 0: n_reads=2796565 p95=2177.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 flip p=0.01 run 0: n_reads=2836632 p95=2139.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 flip p=0.03 run 0: n_reads=2831415 p95=2157.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 flip p=0.02 run 0: n_reads=2837237 p95=2148.0us
+[MTI] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.0 flip p=0.0 run 0: n_reads=2843116 p95=2116.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.0 run 0: n_reads=3117175 p95=721.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.01 run 0: n_reads=3117175 p95=723.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.02 run 0: n_reads=3117175 p95=725.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.03 run 0: n_reads=3117175 p95=741.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.1 run 0: n_reads=3117175 p95=776.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.05 run 0: n_reads=3117175 p95=751.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.04 run 0: n_reads=3117175 p95=750.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re baseline p=nan run 0: n_reads=5943409 p95=926.0us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r baseline p=nan run 0: n_reads=1123979 p95=2074.0us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r flip p=0.0 run 0: n_reads=1123979 p95=1329.0us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r flip p=0.01 run 0: n_reads=1123979 p95=1346.0us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r flip p=0.02 run 0: n_reads=1123979 p95=1334.0us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r flip p=0.03 run 0: n_reads=1123979 p95=1359.0us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r flip p=0.04 run 0: n_reads=1123979 p95=1369.0us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ baseline p=nan run 0: n_reads=440825 p95=3131.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.01 run 0: n_reads=5943409 p95=480.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.0 run 0: n_reads=5943409 p95=470.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.02 run 0: n_reads=5943409 p95=479.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.03 run 0: n_reads=5943409 p95=497.0us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ flip p=0.0 run 0: n_reads=440825 p95=1261.0us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ flip p=0.01 run 0: n_reads=440825 p95=1299.0us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ flip p=0.02 run 0: n_reads=440825 p95=1423.0us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ flip p=0.03 run 0: n_reads=440825 p95=1392.0us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ flip p=0.04 run 0: n_reads=440825 p95=1573.0us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ flip p=0.05 run 0: n_reads=440825 p95=1528.8us
+[MTI] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_ flip p=0.1 run 0: n_reads=440825 p95=1943.8us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r flip p=0.1 run 0: n_reads=1123979 p95=1363.0us
+[MTI] tencent.write_p100.2018-10-09-04.12__rerate_0.50-r flip p=0.05 run 0: n_reads=1123979 p95=1359.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.04 run 0: n_reads=5943409 p95=482.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.05 run 0: n_reads=5943409 p95=498.0us
+[MTI] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-re flip p=0.1 run 0: n_reads=5943409 p95=495.0us
+[MTI] p = 0 source: flashnet_flip_p00 (flips off)
+        baseline_us  flashnet_p0_us  advantage_us  S_us_per_unit_p      MSI  p_star  p_star_ci_lo  p_star_ci_hi  p_star_extrapolated  min_runs_per_p
+metric                                                                                                                                              
+avg           420.9           239.5         181.4            198.3    1.093  0.9152        0.9152        0.9152                 True               1
+p95            2159            1139          1020             1908     1.87  0.5349        0.5349        0.5349                 True               1
+p99            3377            2944         432.6             1000    2.312  0.4324        0.4324        0.4324                 True               1
+p99.9          4800            4441         358.7           -22.88 -0.06379     inf           NaN           NaN                False               1
+p99.99         7550            7239         310.9             6598    21.23 0.04711       0.04711       0.04711                False               1
+[MTI] Figures written under /mnt/heimdall-exp/Heimdall/integration/client-level/experiment/misprediction_tolerance_index/results
