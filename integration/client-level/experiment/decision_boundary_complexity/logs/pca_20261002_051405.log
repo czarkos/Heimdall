@@ -1,0 +1,27 @@
+[PCA] 12 datasets, n_jobs=12
+[PCA] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_8.00.resize_2.00-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_0: n_rows=123026 k95=8 (0.2s)
+[PCA] tencent.write_p100.2018-10-09-04.12__rerate_0.50-rerate_0.50__dev_0: n_rows=682499 k95=11 (1.4s)
+[PCA] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_4.00__dev_0: n_rows=740987 k95=12 (1.4s)
+[PCA] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_2.00.resize_2.00__dev_0: n_rows=740373 k95=11 (1.5s)
+[PCA] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_0: n_rows=883382 k95=11 (1.7s)
+[PCA] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.00.resize_4.00__dev_0: n_rows=884335 k95=11 (1.8s)
+[PCA] msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_8.00.resize_2.00-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_1: n_rows=841956 k95=9 (1.8s)
+[PCA] msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_1: n_rows=1072270 k95=9 (2.2s)
+[PCA] alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.00.resize_4.00__dev_1: n_rows=2357097 k95=10 (4.4s)
+[PCA] tencent.write_p100.2018-10-09-04.12__rerate_0.50-rerate_0.50__dev_1: n_rows=2961421 k95=10 (5.1s)
+[PCA] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_2.00.resize_2.00__dev_1: n_rows=3993653 k95=10 (7.0s)
+[PCA] alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_4.00__dev_1: n_rows=7760767 k95=10 (13.2s)
+                                                                                                         dataset  n_rows  k95
+                                          alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.00.resize_4.00__dev_0  884335   11
+                                          alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.00.resize_4.00__dev_1 2357097   10
+                                msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_0  883382   11
+                                msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_1 1072270    9
+                                  alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_2.00.resize_2.00__dev_0  740373   11
+                                  alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_2.00.resize_2.00__dev_1 3993653   10
+                                              alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_4.00__dev_0  740987   12
+                                              alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_4.00__dev_1 7760767   10
+                                             tencent.write_p100.2018-10-09-04.12__rerate_0.50-rerate_0.50__dev_0  682499   11
+                                             tencent.write_p100.2018-10-09-04.12__rerate_0.50-rerate_0.50__dev_1 2961421   10
+msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_8.00.resize_2.00-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_0  123026    8
+msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_8.00.resize_2.00-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_1  841956    9
+[PCA] Figures written under /mnt/heimdall-exp/Heimdall/integration/client-level/experiment/decision_boundary_complexity/pca/results

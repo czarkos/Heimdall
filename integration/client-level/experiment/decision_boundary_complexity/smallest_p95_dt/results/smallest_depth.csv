@@ -1,0 +1,13 @@
+dataset,device,smallest_depth_val_ge_95,smallest_depth_train_ge_95,flashnet_val_accuracy,smallest_depth_val_ge_flashnet,best_val_accuracy,best_val_depth,train_accuracy_at_max_depth,val_accuracy_at_max_depth,fully_grown_depth
+alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.00.resize_4.00__dev_0,dev_0,not reached,33,0.8261,6,0.843656709666914,14,0.980222404657064,0.797154022905321,not reached
+alibaba.iops_p100.alibaba_9086.35__orig-rerate_4.00.resize_4.00__dev_1,dev_1,not reached,21,0.8935,8,0.906975441835681,13,0.9981842063284652,0.8752966571606272,not reached
+alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_2.00.resize_2.00__dev_0,dev_0,not reached,31,0.8474,4,0.8635500436265995,14,0.9885408956578584,0.8191157442049559,not reached
+alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_2.00.resize_2.00__dev_1,dev_1,not reached,22,0.8984,9,0.9101805013654164,14,0.997777472849412,0.8777004717985083,not reached
+alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_4.00__dev_0,dev_0,not reached,33,0.8369,6,0.8492418230794561,14,0.983575938006926,0.80538956096455,not reached
+alibaba.offset_p100.alibaba_9086.3__rerate_0.50-rerate_4.00__dev_1,dev_1,not reached,26,0.8933,12,0.8991004498523858,15,0.9948450964763016,0.8590603404199172,not reached
+msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_0,dev_0,not reached,32,0.8105,7,0.8322492421172267,13,0.983712595457005,0.7846594112173443,not reached
+msr.overall_p100.src1_0.2108__orig-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_1,dev_1,not reached,26,0.8827,7,0.8897665699870368,13,0.990450166469266,0.8546877185783431,not reached
+msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_8.00.resize_2.00-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_0,dev_0,not reached,18,0.8547,4,0.8829353144863687,11,0.9965210605888186,0.8484710548989645,not reached
+msr.write_p100.src1_0.3047__rw_ratio_40_60.rerate_8.00.resize_2.00-rw_ratio_40_60.rerate_8.00.resize_2.00__dev_1,dev_1,not reached,22,0.8901,6,0.902667122747507,11,0.9963085956985877,0.8683375378285801,not reached
+tencent.write_p100.2018-10-09-04.12__rerate_0.50-rerate_0.50__dev_0,dev_0,not reached,32,0.8262,5,0.8451750915750916,14,0.9850842053749608,0.8042637362637363,not reached
+tencent.write_p100.2018-10-09-04.12__rerate_0.50-rerate_0.50__dev_1,dev_1,not reached,23,0.8694,9,0.8788345598837315,13,0.998975491487192,0.8418172080844946,not reached
