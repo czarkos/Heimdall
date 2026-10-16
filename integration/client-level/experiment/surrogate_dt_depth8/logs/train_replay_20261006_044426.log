@@ -1,0 +1,512 @@
+[surrogate_dt_depth8] max_depth=8 num_runs=1
+[surrogate_dt_depth8] running: python3 /mnt/heimdall-exp/Heimdall/integration/client-level/experiment/small_surrogate_dt/run_small_surrogate_dt.py -devices /dev/nvme0n1 /dev/nvme1n1 -trace_dirs /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00 /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00 /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00 /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00 /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50 /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00 -max_depth 8 -algo_name surrogate_dt_depth8 -num_runs 1 -resume -only_training
+
+=======================================================
+Training small surrogate DT for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results
+  max_depth         => 8
+=======================================================
+
+  -> Training small surrogate for dev_0
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9183
+Test  fidelity (DT vs FlashNet): 0.9158
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.7663, Test: 0.7652
+Surrogate DT     - Train: 0.7574, Test: 0.7558
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9261    0.9680    0.9466    334578
+           1     0.8731    0.7400    0.8011     99395
+
+    accuracy                         0.9158    433973
+   macro avg     0.8996    0.8540    0.8739    433973
+weighted avg     0.9140    0.9158    0.9133    433973
+
+Confusion matrix (DT vs teacher target, test set):
+[[323888  10690]
+ [ 25839  73556]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+
+  -> Training small surrogate for dev_1
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9665
+Test  fidelity (DT vs FlashNet): 0.9658
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8713, Test: 0.8716
+Surrogate DT     - Train: 0.8696, Test: 0.8698
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9732    0.9597    0.9664    861388
+           1     0.9583    0.9723    0.9652    819659
+
+    accuracy                         0.9658   1681047
+   macro avg     0.9658    0.9660    0.9658   1681047
+weighted avg     0.9659    0.9658    0.9658   1681047
+
+Confusion matrix (DT vs teacher target, test set):
+[[826696  34692]
+ [ 22731 796928]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+  small surrogate training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+  Small surrogate headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers
+    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)
+  Small surrogate metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+  Small surrogate training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+
+=======================================================
+Training small surrogate DT for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results
+  max_depth         => 8
+=======================================================
+
+  -> Training small surrogate for dev_0
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9015
+Test  fidelity (DT vs FlashNet): 0.8992
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.7750, Test: 0.7750
+Surrogate DT     - Train: 0.7643, Test: 0.7646
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9048    0.9600    0.9316    308124
+           1     0.8818    0.7471    0.8089    123066
+
+    accuracy                         0.8992    431190
+   macro avg     0.8933    0.8535    0.8702    431190
+weighted avg     0.8982    0.8992    0.8966    431190
+
+Confusion matrix (DT vs teacher target, test set):
+[[295799  12325]
+ [ 31125  91941]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+
+  -> Training small surrogate for dev_1
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9608
+Test  fidelity (DT vs FlashNet): 0.9590
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8817, Test: 0.8814
+Surrogate DT     - Train: 0.8764, Test: 0.8759
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9622    0.9652    0.9637    302960
+           1     0.9548    0.9509    0.9529    234175
+
+    accuracy                         0.9590    537135
+   macro avg     0.9585    0.9581    0.9583    537135
+weighted avg     0.9590    0.9590    0.9590    537135
+
+Confusion matrix (DT vs teacher target, test set):
+[[292423  10537]
+ [ 11487 222688]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+  small surrogate training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+  Small surrogate headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers
+    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)
+  Small surrogate metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+  Small surrogate training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+
+=======================================================
+Training small surrogate DT for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results
+  max_depth         => 8
+=======================================================
+
+  -> Training small surrogate for dev_0
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9296
+Test  fidelity (DT vs FlashNet): 0.9273
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8007, Test: 0.7988
+Surrogate DT     - Train: 0.7874, Test: 0.7869
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9525    0.9518    0.9521    271472
+           1     0.8477    0.8499    0.8488     85774
+
+    accuracy                         0.9273    357246
+   macro avg     0.9001    0.9008    0.9005    357246
+weighted avg     0.9274    0.9273    0.9273    357246
+
+Confusion matrix (DT vs teacher target, test set):
+[[258377  13095]
+ [ 12877  72897]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+
+  -> Training small surrogate for dev_1
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9515
+Test  fidelity (DT vs FlashNet): 0.9514
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8553, Test: 0.8547
+Surrogate DT     - Train: 0.8512, Test: 0.8508
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9599    0.9509    0.9554   1180631
+           1     0.9412    0.9519    0.9465    974582
+
+    accuracy                         0.9514   2155213
+   macro avg     0.9506    0.9514    0.9510   2155213
+weighted avg     0.9515    0.9514    0.9514   2155213
+
+Confusion matrix (DT vs teacher target, test set):
+[[1122686   57945]
+ [  46858  927724]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+  small surrogate training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+  Small surrogate headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers
+    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)
+  Small surrogate metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+  Small surrogate training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+
+=======================================================
+Training small surrogate DT for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results
+  max_depth         => 8
+=======================================================
+
+  -> Training small surrogate for dev_0
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9217
+Test  fidelity (DT vs FlashNet): 0.9205
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.7975, Test: 0.7976
+Surrogate DT     - Train: 0.7901, Test: 0.7903
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9315    0.9625    0.9467    260226
+           1     0.8863    0.8052    0.8438     94555
+
+    accuracy                         0.9205    354781
+   macro avg     0.9089    0.8838    0.8952    354781
+weighted avg     0.9194    0.9205    0.9193    354781
+
+Confusion matrix (DT vs teacher target, test set):
+[[250456   9770]
+ [ 18422  76133]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+
+  -> Training small surrogate for dev_1
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9461
+Test  fidelity (DT vs FlashNet): 0.9458
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8427, Test: 0.8427
+Surrogate DT     - Train: 0.8401, Test: 0.8399
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9646    0.9347    0.9494   2318962
+           1     0.9250    0.9591    0.9417   1948139
+
+    accuracy                         0.9458   4267101
+   macro avg     0.9448    0.9469    0.9456   4267101
+weighted avg     0.9465    0.9458    0.9459   4267101
+
+Confusion matrix (DT vs teacher target, test set):
+[[2167422  151540]
+ [  79630 1868509]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+  small surrogate training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+  Small surrogate headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers
+    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)
+  Small surrogate metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+  Small surrogate training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+
+=======================================================
+Training small surrogate DT for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results
+  max_depth         => 8
+=======================================================
+
+  -> Training small surrogate for dev_0
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9374
+Test  fidelity (DT vs FlashNet): 0.9354
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.7922, Test: 0.7902
+Surrogate DT     - Train: 0.7837, Test: 0.7818
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9450    0.9744    0.9595    257117
+           1     0.8945    0.7924    0.8404     70288
+
+    accuracy                         0.9354    327405
+   macro avg     0.9197    0.8834    0.8999    327405
+weighted avg     0.9341    0.9354    0.9339    327405
+
+Confusion matrix (DT vs teacher target, test set):
+[[250547   6570]
+ [ 14591  55697]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+
+  -> Training small surrogate for dev_1
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9082
+Test  fidelity (DT vs FlashNet): 0.9077
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8430, Test: 0.8431
+Surrogate DT     - Train: 0.8185, Test: 0.8186
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9346    0.9238    0.9292   1004104
+           1     0.8583    0.8771    0.8676    528423
+
+    accuracy                         0.9077   1532527
+   macro avg     0.8964    0.9004    0.8984   1532527
+weighted avg     0.9083    0.9077    0.9079   1532527
+
+Confusion matrix (DT vs teacher target, test set):
+[[927616  76488]
+ [ 64958 463465]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+  small surrogate training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+  Small surrogate headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers
+    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)
+  Small surrogate metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+  Small surrogate training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+
+=======================================================
+Training small surrogate DT for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results
+  max_depth         => 8
+=======================================================
+
+  -> Training small surrogate for dev_0
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9653
+Test  fidelity (DT vs FlashNet): 0.9597
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8726, Test: 0.8721
+Surrogate DT     - Train: 0.8648, Test: 0.8633
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9550    0.9780    0.9664     35269
+           1     0.9668    0.9330    0.9496     24269
+
+    accuracy                         0.9597     59538
+   macro avg     0.9609    0.9555    0.9580     59538
+weighted avg     0.9598    0.9597    0.9595     59538
+
+Confusion matrix (DT vs teacher target, test set):
+[[34492   777]
+ [ 1625 22644]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_0_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+
+  -> Training small surrogate for dev_1
+=== Small Surrogate DT (mimic FlashNet outputs) ===
+Train fidelity (DT vs FlashNet): 0.9763
+Test  fidelity (DT vs FlashNet): 0.9744
+Configured max_depth: 8
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8972, Test: 0.8956
+Surrogate DT     - Train: 0.8955, Test: 0.8947
+
+Classification report (DT vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9751    0.9745    0.9748    209271
+           1     0.9738    0.9744    0.9741    203406
+
+    accuracy                         0.9744    412677
+   macro avg     0.9744    0.9744    0.9744    412677
+weighted avg     0.9744    0.9744    0.9744    412677
+
+Confusion matrix (DT vs teacher target, test set):
+[[203932   5339]
+ [  5213 198193]]
+Writing decision tree header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+
+=== Small surrogate DT training complete ===
+Target mode: flashnet
+Configured max_depth: 8
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers/w_Trace_dev_1_dt.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+  small surrogate training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
+  Small surrogate headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/surrogate_headers
+    (w_Trace_dev_0_dt.h, w_Trace_dev_1_dt.h)
+  Small surrogate metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_metrics.json
+  Small surrogate training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_dt_depth8/training_results/small_surrogate_training.stats
