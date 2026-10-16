@@ -1,0 +1,10 @@
+host = ubuntu
+cpu_model = Intel(R) Xeon(R) CPU E5-2670 v3 @ 2.30GHz
+pinned_cpu = 4
+governor = powersave
+turbo_disabled = 0
+gcc = gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+n_rows_per_dataset = 200000
+skip_rows = 1000
+timed_passes = 10
+date = 2026-10-06T03:53:39+00:00
