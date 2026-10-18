@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Inference latency, CPU cost and memory footprint of FlashNet vs. the depth-5 surrogate DT.
+Inference latency, CPU cost and memory footprint of FlashNet vs. the depth-5 surrogate DT
+vs. the logistic-regression surrogate.
 
 For every trace and device (one model per SSD):
   1. Real inputs: a window of mldrive<dev>.csv (the trace's FlashNet training features) is
      converted into the replayer's history pool layout (see bench.c).
   2. For each model and optimization level, bench.c is compiled against the exact inference
-     code used in the replays (flashnet/flashnet_algo.c, surrogate_dt/dt_algo.c) plus that
+     code used in the replays (flashnet/flashnet_algo.c, surrogate_dt/dt_algo.c,
+     surrogate_lr/lr_algo.c) plus that
      trace's trained headers, and run pinned to one CPU.
   3. Model footprint is read from the compiled object (nm symbol sizes of the weight/tree arrays).
 
@@ -61,6 +63,14 @@ MODELS = {
         "weights_dst": "dt_weights_header/w_Trace_dev_{d}_dt.h",
         "symbol_re": r"^dt_(feature|threshold|left|right|value)_dev_{d}$",
         "color": "magenta",
+    },
+    "lr": {
+        "label": "Logistic regression",
+        "src_dir": "surrogate_lr", "algo": "lr_algo.c", "header": "lr_algo.h", "define": "MODEL_LR",
+        "weights_src": "surrogate_lr/training_results/lr_headers/w_Trace_dev_{d}_lr.h",
+        "weights_dst": "lr_weights_header/w_Trace_dev_{d}_lr.h",
+        "symbol_re": r"^lr_(weight|bias)_dev_{d}$",
+        "color": "teal",
     },
 }
 
@@ -142,6 +152,8 @@ def model_footprint(model_key, workspace, device):
 def model_size_units(model_key, pair_dir, device, nbytes):
     if model_key == "flashnet":
         return {"n_params": nbytes // 8, "n_nodes": np.nan}   # all weights are int64
+    if model_key == "lr":
+        return {"n_params": nbytes // 8, "n_nodes": np.nan}   # 12 double weights + 1 double bias
     header = os.path.join(pair_dir, MODELS[model_key]["weights_src"].format(d=device))
     m = re.search(r"#define\s+DT_DEV_\d+_NODE_COUNT\s+(\d+)", open(header).read())
     return {"n_params": np.nan, "n_nodes": int(m.group(1)) if m else np.nan}
@@ -303,7 +315,7 @@ def write_environment(output_dir, args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Inference latency / CPU / memory of FlashNet vs depth-5 DT.")
+    parser = argparse.ArgumentParser(description="Inference latency / CPU / memory of FlashNet vs depth-5 DT vs LR.")
     parser.add_argument("-data_root", default=DEFAULT_DATA_ROOT)
     parser.add_argument("-dev_pair", default=DEFAULT_DEV_PAIR)
     parser.add_argument("-output_dir", default=os.path.join(SCRIPT_DIR, "results"))

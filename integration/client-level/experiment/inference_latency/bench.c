@@ -1,14 +1,15 @@
 /*
     Inference latency / CPU cost microbenchmark for the client-level models.
 
-    Links the exact inference code used by the replayers (flashnet/flashnet_algo.c or
-    surrogate_dt/dt_algo.c) with the trained per-trace headers, and calls the model on real
+    Links the exact inference code used by the replayers (flashnet/flashnet_algo.c,
+    surrogate_dt/dt_algo.c or surrogate_lr/lr_algo.c) with the trained per-trace headers, and calls the model on real
     feature vectors taken from that trace's mldrive<dev>.csv (the history arrays are filled
     exactly as the replayer fills them, so the model reads the same 12 features).
 
     Build (done by run_bench.py):
         gcc -O0 -DMODEL_FLASHNET bench.c flashnet_algo.c -o bench
         gcc -O0 -DMODEL_DT       bench.c dt_algo.c       -o bench
+        gcc -O0 -DMODEL_LR       bench.c lr_algo.c       -o bench
 
     Usage:  ./bench <inputs.bin> <device 0|1> <cpu to pin> <timed passes>
 
@@ -39,8 +40,13 @@
 #define MODEL_NAME "dt"
 #define MODEL_INIT(n) set_surrogate_dt(n)
 #define MODEL_INFER(t, s, d, q) surrogate_dt_inference(t, s, d, q)
+#elif defined(MODEL_LR)
+#include "lr_algo.h"
+#define MODEL_NAME "lr"
+#define MODEL_INIT(n) set_surrogate_lr(n)
+#define MODEL_INFER(t, s, d, q) surrogate_lr_inference(t, s, d, q)
 #else
-#error "Define MODEL_FLASHNET or MODEL_DT"
+#error "Define MODEL_FLASHNET, MODEL_DT or MODEL_LR"
 #endif
 
 /* Globals owned by the model's algo .c (shared history pool) */
