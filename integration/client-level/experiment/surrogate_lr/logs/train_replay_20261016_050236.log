@@ -1,0 +1,591 @@
+algo = surrogate_lr
+devices = ['/dev/nvme0n1', '/dev/nvme1n1']
+Found 6 trace dirs
+
+Processing trace dir 1 out of 6: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00
+
+=======================================================
+Training surrogate logistic regression for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results
+  target / C        => flashnet / 1.0
+=======================================================
+
+  -> Training surrogate LR for dev_0
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.7840
+Test  fidelity (LR vs FlashNet): 0.7841
+C = 1.0, lbfgs iterations = 19, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.7663, Test: 0.7652
+Surrogate LR     - Train: 0.6774, Test: 0.6766
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.7921    0.9762    0.8746    334578
+           1     0.6318    0.1377    0.2261     99395
+
+    accuracy                         0.7841    433973
+   macro avg     0.7119    0.5569    0.5504    433973
+weighted avg     0.7554    0.7841    0.7261    433973
+
+Confusion matrix (LR vs teacher target, test set):
+[[326599   7979]
+ [ 85706  13689]]
+
+Standardized coefficients (feature: coef):
+  io_type            -0.621093
+  size               -0.105183
+  cur_queue_len      +0.027488
+  prev_queue_len_1   +0.037178
+  prev_queue_len_2   -0.007798
+  prev_queue_len_3   +0.078529
+  prev_latency_1     +1.485108
+  prev_latency_2     +1.296158
+  prev_latency_3     +0.744661
+  prev_throughput_1  -0.403642
+  prev_throughput_2  -0.432131
+  prev_throughput_3  -0.268013
+  intercept          -1.304966
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+
+  -> Training surrogate LR for dev_1
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.8625
+Test  fidelity (LR vs FlashNet): 0.8624
+C = 1.0, lbfgs iterations = 18, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8713, Test: 0.8716
+Surrogate LR     - Train: 0.8045, Test: 0.8044
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.8421    0.9003    0.8702    861388
+           1     0.8870    0.8226    0.8536    819659
+
+    accuracy                         0.8624   1681047
+   macro avg     0.8646    0.8615    0.8619   1681047
+weighted avg     0.8640    0.8624    0.8621   1681047
+
+Confusion matrix (LR vs teacher target, test set):
+[[775496  85892]
+ [145376 674283]]
+
+Standardized coefficients (feature: coef):
+  io_type            +0.268857
+  size               +0.019233
+  cur_queue_len      +0.091924
+  prev_queue_len_1   +0.037878
+  prev_queue_len_2   +0.094594
+  prev_queue_len_3   +0.077361
+  prev_latency_1     +3.371332
+  prev_latency_2     +1.309563
+  prev_latency_3     +0.714197
+  prev_throughput_1  -0.828392
+  prev_throughput_2  -0.565283
+  prev_throughput_3  -0.534555
+  intercept          +1.023620
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+  surrogate LR training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+  Surrogate LR headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers
+    (w_Trace_dev_0_lr.h, w_Trace_dev_1_lr.h)
+  Surrogate LR metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+  Surrogate LR training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/alibaba.per_3mins.iops_p100.alibaba_9086.35/original...modified.rerate_4.00.resize_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+
+Processing trace dir 2 out of 6: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00
+
+=======================================================
+Training surrogate logistic regression for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results
+  target / C        => flashnet / 1.0
+=======================================================
+
+  -> Training surrogate LR for dev_0
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.7486
+Test  fidelity (LR vs FlashNet): 0.7481
+C = 1.0, lbfgs iterations = 18, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.7750, Test: 0.7750
+Surrogate LR     - Train: 0.6909, Test: 0.6898
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.7498    0.9718    0.8465    308124
+           1     0.7268    0.1881    0.2989    123066
+
+    accuracy                         0.7481    431190
+   macro avg     0.7383    0.5799    0.5727    431190
+weighted avg     0.7432    0.7481    0.6902    431190
+
+Confusion matrix (LR vs teacher target, test set):
+[[299421   8703]
+ [ 99917  23149]]
+
+Standardized coefficients (feature: coef):
+  io_type            -0.568787
+  size               +0.073698
+  cur_queue_len      -0.099386
+  prev_queue_len_1   -0.092543
+  prev_queue_len_2   +0.010124
+  prev_queue_len_3   +0.159423
+  prev_latency_1     +1.382495
+  prev_latency_2     +0.952678
+  prev_latency_3     +0.942475
+  prev_throughput_1  -0.421114
+  prev_throughput_2  -0.196838
+  prev_throughput_3  -0.375990
+  intercept          -0.955747
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+
+  -> Training surrogate LR for dev_1
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.9264
+Test  fidelity (LR vs FlashNet): 0.9270
+C = 1.0, lbfgs iterations = 22, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8817, Test: 0.8814
+Surrogate LR     - Train: 0.8582, Test: 0.8581
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9351    0.9354    0.9353    302960
+           1     0.9164    0.9161    0.9163    234175
+
+    accuracy                         0.9270    537135
+   macro avg     0.9258    0.9258    0.9258    537135
+weighted avg     0.9270    0.9270    0.9270    537135
+
+Confusion matrix (LR vs teacher target, test set):
+[[283398  19562]
+ [ 19653 214522]]
+
+Standardized coefficients (feature: coef):
+  io_type            +0.002860
+  size               -1.967301
+  cur_queue_len      +0.540020
+  prev_queue_len_1   +0.231772
+  prev_queue_len_2   +0.210774
+  prev_queue_len_3   +0.358036
+  prev_latency_1     +4.356938
+  prev_latency_2     +1.088433
+  prev_latency_3     +0.670420
+  prev_throughput_1  -1.856192
+  prev_throughput_2  -1.232599
+  prev_throughput_3  -0.690566
+  intercept          -0.288086
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+  surrogate LR training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+  Surrogate LR headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers
+    (w_Trace_dev_0_lr.h, w_Trace_dev_1_lr.h)
+  Surrogate LR metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+  Surrogate LR training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p10.alibaba_50.97/msr.per_3mins.overall_p100.src1_0.2108/original...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+
+Processing trace dir 3 out of 6: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00
+
+=======================================================
+Training surrogate logistic regression for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results
+  target / C        => flashnet / 1.0
+=======================================================
+
+  -> Training surrogate LR for dev_0
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.8521
+Test  fidelity (LR vs FlashNet): 0.8497
+C = 1.0, lbfgs iterations = 20, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8007, Test: 0.7988
+Surrogate LR     - Train: 0.7544, Test: 0.7528
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.8488    0.9761    0.9080    271472
+           1     0.8560    0.4498    0.5897     85774
+
+    accuracy                         0.8497    357246
+   macro avg     0.8524    0.7129    0.7489    357246
+weighted avg     0.8505    0.8497    0.8316    357246
+
+Confusion matrix (LR vs teacher target, test set):
+[[264982   6490]
+ [ 47195  38579]]
+
+Standardized coefficients (feature: coef):
+  io_type            -0.869288
+  size               -0.094844
+  cur_queue_len      -0.145042
+  prev_queue_len_1   -0.117925
+  prev_queue_len_2   -0.085502
+  prev_queue_len_3   +0.009277
+  prev_latency_1     +2.783646
+  prev_latency_2     +2.366343
+  prev_latency_3     +1.751764
+  prev_throughput_1  -1.116114
+  prev_throughput_2  -0.810919
+  prev_throughput_3  -0.732735
+  intercept          -1.453597
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+
+  -> Training surrogate LR for dev_1
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.8362
+Test  fidelity (LR vs FlashNet): 0.8359
+C = 1.0, lbfgs iterations = 24, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8553, Test: 0.8547
+Surrogate LR     - Train: 0.7845, Test: 0.7849
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.8113    0.9128    0.8590   1180631
+           1     0.8754    0.7428    0.8037    974582
+
+    accuracy                         0.8359   2155213
+   macro avg     0.8434    0.8278    0.8314   2155213
+weighted avg     0.8403    0.8359    0.8340   2155213
+
+Confusion matrix (LR vs teacher target, test set):
+[[1077622  103009]
+ [ 250628  723954]]
+
+Standardized coefficients (feature: coef):
+  io_type            +0.086867
+  size               -0.062022
+  cur_queue_len      +0.228748
+  prev_queue_len_1   +0.124106
+  prev_queue_len_2   +0.150346
+  prev_queue_len_3   +0.199128
+  prev_latency_1     +4.138319
+  prev_latency_2     +1.778205
+  prev_latency_3     +0.744852
+  prev_throughput_1  -0.548345
+  prev_throughput_2  -0.502035
+  prev_throughput_3  -0.291840
+  intercept          +0.908228
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+  surrogate LR training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+  Surrogate LR headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers
+    (w_Trace_dev_0_lr.h, w_Trace_dev_1_lr.h)
+  Surrogate LR metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+  Surrogate LR training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_2.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+
+Processing trace dir 4 out of 6: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00
+
+=======================================================
+Training surrogate logistic regression for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results
+  target / C        => flashnet / 1.0
+=======================================================
+
+  -> Training surrogate LR for dev_0
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.8430
+Test  fidelity (LR vs FlashNet): 0.8447
+C = 1.0, lbfgs iterations = 17, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.7975, Test: 0.7976
+Surrogate LR     - Train: 0.7484, Test: 0.7493
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.8422    0.9700    0.9016    260226
+           1     0.8584    0.4998    0.6317     94555
+
+    accuracy                         0.8447    354781
+   macro avg     0.8503    0.7349    0.7667    354781
+weighted avg     0.8465    0.8447    0.8297    354781
+
+Confusion matrix (LR vs teacher target, test set):
+[[252428   7798]
+ [ 47300  47255]]
+
+Standardized coefficients (feature: coef):
+  io_type            -0.400161
+  size               -0.095151
+  cur_queue_len      -0.071957
+  prev_queue_len_1   -0.213864
+  prev_queue_len_2   -0.017103
+  prev_queue_len_3   +0.148871
+  prev_latency_1     +2.625919
+  prev_latency_2     +2.124285
+  prev_latency_3     +2.027052
+  prev_throughput_1  -0.953007
+  prev_throughput_2  -0.987905
+  prev_throughput_3  -0.745886
+  intercept          -1.142569
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+
+  -> Training surrogate LR for dev_1
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.7986
+Test  fidelity (LR vs FlashNet): 0.7987
+C = 1.0, lbfgs iterations = 22, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8427, Test: 0.8427
+Surrogate LR     - Train: 0.7552, Test: 0.7546
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.7656    0.9074    0.8305   2318962
+           1     0.8585    0.6693    0.7522   1948139
+
+    accuracy                         0.7987   4267101
+   macro avg     0.8121    0.7883    0.7913   4267101
+weighted avg     0.8080    0.7987    0.7947   4267101
+
+Confusion matrix (LR vs teacher target, test set):
+[[2104114  214848]
+ [ 644301 1303838]]
+
+Standardized coefficients (feature: coef):
+  io_type            -0.004610
+  size               -0.039355
+  cur_queue_len      +0.152563
+  prev_queue_len_1   +0.084153
+  prev_queue_len_2   +0.109591
+  prev_queue_len_3   +0.098408
+  prev_latency_1     +4.585785
+  prev_latency_2     +1.861801
+  prev_latency_3     +0.882248
+  prev_throughput_1  -0.431845
+  prev_throughput_2  -0.363746
+  prev_throughput_3  -0.404662
+  intercept          +0.916735
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+  surrogate LR training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+  Surrogate LR headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers
+    (w_Trace_dev_0_lr.h, w_Trace_dev_1_lr.h)
+  Surrogate LR metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+  Surrogate LR training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.iops_p75.alibaba_9086.23/alibaba.per_3mins.offset_p100.alibaba_9086.3/modified.rerate_0.50...modified.rerate_4.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+
+Processing trace dir 5 out of 6: /mnt/heimdall-exp/Heimdall/integration/client-level/data/alibaba.per_3mins.overall_p25.alibaba_9076.45/tencent.per_3mins.write_p100.2018-10-09-04.12/modified.rerate_0.50...modified.rerate_0.50
+     The surrogate LR model is trained, skipping training
+
+Processing trace dir 6 out of 6: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00
+
+=======================================================
+Training surrogate logistic regression for workload:
+  Trace root dir    => /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00
+  FlashNet data dir => /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/flashnet/training_results
+  Output dir        => /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results
+  target / C        => flashnet / 1.0
+=======================================================
+
+  -> Training surrogate LR for dev_0
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.9257
+Test  fidelity (LR vs FlashNet): 0.9267
+C = 1.0, lbfgs iterations = 47, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8726, Test: 0.8721
+Surrogate LR     - Train: 0.8512, Test: 0.8512
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9069    0.9765    0.9404     35269
+           1     0.9616    0.8543    0.9048     24269
+
+    accuracy                         0.9267     59538
+   macro avg     0.9343    0.9154    0.9226     59538
+weighted avg     0.9292    0.9267    0.9259     59538
+
+Confusion matrix (LR vs teacher target, test set):
+[[34441   828]
+ [ 3535 20734]]
+
+Standardized coefficients (feature: coef):
+  io_type            +0.716853
+  size               -1.727030
+  cur_queue_len      +0.374823
+  prev_queue_len_1   -0.303288
+  prev_queue_len_2   -0.201815
+  prev_queue_len_3   +0.037657
+  prev_latency_1     +6.024145
+  prev_latency_2     +3.522601
+  prev_latency_3     +1.271728
+  prev_throughput_1  -13.776163
+  prev_throughput_2  -0.963491
+  prev_throughput_3  -0.560037
+  intercept          -3.941038
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_0_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+
+  -> Training surrogate LR for dev_1
+=== Surrogate Logistic Regression (mimic FlashNet outputs) ===
+Train fidelity (LR vs FlashNet): 0.9428
+Test  fidelity (LR vs FlashNet): 0.9437
+C = 1.0, lbfgs iterations = 22, converged = True
+Header match rate (C-order decision vs sklearn predict): 1.000000
+
+Accuracy against ground-truth labels (for reference)
+FlashNet teacher - Train: 0.8972, Test: 0.8956
+Surrogate LR     - Train: 0.8753, Test: 0.8746
+
+Classification report (LR vs teacher target, test set):
+              precision    recall  f1-score   support
+
+           0     0.9484    0.9400    0.9442    209271
+           1     0.9388    0.9474    0.9431    203406
+
+    accuracy                         0.9437    412677
+   macro avg     0.9436    0.9437    0.9437    412677
+weighted avg     0.9437    0.9437    0.9437    412677
+
+Confusion matrix (LR vs teacher target, test set):
+[[196718  12553]
+ [ 10697 192709]]
+
+Standardized coefficients (feature: coef):
+  io_type            +1.512762
+  size               -1.466347
+  cur_queue_len      +0.375260
+  prev_queue_len_1   +0.314693
+  prev_queue_len_2   +0.127612
+  prev_queue_len_3   +0.030303
+  prev_latency_1     +1.162177
+  prev_latency_2     +0.625777
+  prev_latency_3     +0.133666
+  prev_throughput_1  -2.050265
+  prev_throughput_2  -1.379020
+  prev_throughput_3  -0.576879
+  intercept          -0.589424
+Writing logistic regression header to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Header written: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+
+=== Surrogate logistic regression training complete ===
+Target mode: flashnet
+Generated header: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers/w_Trace_dev_1_lr.h
+Metrics JSON: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+Stats text: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+  surrogate LR training stats written to: /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
+  Surrogate LR headers:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/lr_headers
+    (w_Trace_dev_0_lr.h, w_Trace_dev_1_lr.h)
+  Surrogate LR metrics:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_metrics.json
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_metrics.json
+  Surrogate LR training stats:
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_0_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_dev_1_training.stats
+    /mnt/heimdall-exp/Heimdall/integration/client-level/data/msr.per_3mins.overall_p50.prxy_0.1490/msr.per_3mins.write_p100.src1_0.3047/modified.rw_ratio_40_60.rerate_8.00.resize_2.00...modified.rw_ratio_40_60.rerate_8.00.resize_2.00/nvme0n1...nvme1n1/surrogate_lr/training_results/surrogate_lr_training.stats
