@@ -28,6 +28,11 @@ ALGO_WHITELIST = {
     #"small_hierarchy_p98",
     "small_surrogate_dt_depth5",
     "padded_small_surrogate_dt",
+    "surrogate_dt_depth6",
+    "surrogate_dt_depth7",
+    "surrogate_dt_depth8",
+    "surrogate_dt_depth11",
+    "surrogate_lr",
 }
 
 
